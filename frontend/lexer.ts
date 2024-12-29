@@ -1,13 +1,17 @@
-import * as fs from 'fs';
-
 export enum TokenType {
+    // Literal
     Number,
     Identifier,
+
+    //Keywords
+    Let,
+
+    //Grouping * Operators
     Equals,
     OpenParen,
     CloseParen,
     BinaryOperator,
-    Let,
+    EOF, // Signified the end of file
 }
 
 const KEYWORDS: Record<string, TokenType> = {
@@ -47,7 +51,7 @@ export const tokenize = (sourceCode: string): Token[] => {
             tokens.push(token(src.shift(), TokenType.OpenParen));
         } else if(src[0] === ')'){
             tokens.push(token(src.shift(), TokenType.CloseParen))
-        } else if (src[0] === '+' || src[0] === '-' || src[0] === '/' || src[0] === '*'){
+        } else if (src[0] == '+' || src[0] == '-' || src[0] == '/' || src[0] == '*'){
             tokens.push(token(src.shift(), TokenType.BinaryOperator));           
         } else if (src[0] === '='){
             tokens.push(token(src.shift(), TokenType.Equals));           
@@ -88,10 +92,6 @@ export const tokenize = (sourceCode: string): Token[] => {
         }
     }
 
+    tokens.push({type: TokenType.EOF, value: 'EndOfFile'});
     return tokens;
 }
-
-const sourceCode = fs.readFileSync('testing.txt', 'utf-8');
-for(const token of tokenize(sourceCode)){
-    console.log(token);
-};
