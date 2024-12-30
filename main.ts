@@ -1,5 +1,6 @@
 import Parser from "./frontend/parser";
 import readline from "readline";
+import { evaluate } from "./runtime/interpreter";
 
 repl();
 
@@ -18,7 +19,11 @@ function repl () {
         }
 
         const program = parser.produceAST(input);
-        console.log(program);
+
+
+        const result = evaluate(program);
+
+        console.log(result);
 
         rl.close();
         process.exit(1);

@@ -1,5 +1,6 @@
 export enum TokenType {
     // Literal
+    Null,
     Number,
     Identifier,
 
@@ -11,11 +12,19 @@ export enum TokenType {
     OpenParen,
     CloseParen,
     BinaryOperator,
+
+    //Comparisons
+    LessThan,
+    GreaterThan,
+    Bigger,
+    Smaller,
+
     EOF, // Signified the end of file
 }
 
 const KEYWORDS: Record<string, TokenType> = {
-    'let': TokenType.Let,
+    let: TokenType.Let,
+    null: TokenType.Null,
 }
 
 export interface Token {
@@ -51,7 +60,7 @@ export const tokenize = (sourceCode: string): Token[] => {
             tokens.push(token(src.shift(), TokenType.OpenParen));
         } else if(src[0] === ')'){
             tokens.push(token(src.shift(), TokenType.CloseParen))
-        } else if (src[0] == '+' || src[0] == '-' || src[0] == '/' || src[0] == '*'){
+        } else if (src[0] === '+' || src[0] === '-' || src[0] === '/' || src[0] === '*' || src[0] === '%'){
             tokens.push(token(src.shift(), TokenType.BinaryOperator));           
         } else if (src[0] === '='){
             tokens.push(token(src.shift(), TokenType.Equals));           
@@ -75,11 +84,11 @@ export const tokenize = (sourceCode: string): Token[] => {
 
                 //check for reserved keywords
                 const reserved = KEYWORDS[ident];
-                if(reserved === undefined){
-                    tokens.push(token(ident, TokenType.Identifier));
+                if(typeof(reserved) === 'number'){
+                    tokens.push(token(ident, reserved));
                 }
                 else {
-                    tokens.push(token(ident, reserved));
+                    tokens.push(token(ident, TokenType.Identifier));
                 }
             }
             else if(isSkippable(src[0])){

@@ -2,7 +2,8 @@ export type NodeType =
 | 'Program' 
 | 'NumericLiteral' 
 | 'Identifier' 
-| 'BinaryExpr';
+| 'BinaryExpr'
+| 'NullLiteral';
 
 export interface Stmt {
     kind: NodeType;
@@ -27,7 +28,17 @@ export interface Identifier extends Expr {
     symbol: string;
 }
 
+export interface BinaryOperator extends Expr {
+    kidn: 'BinaryOperator';
+    symbol: string;
+}
+
 export interface NumericLiteral extends Expr{
     kind: 'NumericLiteral';
     value: number;
+}
+
+export interface NullLiteral extends Expr{
+    kind: 'NullLiteral';
+    value: 'null';
 }
